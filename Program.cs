@@ -1,5 +1,5 @@
 ﻿public class MainClass {
     public static void Main(string[] args) {
-        Day1.Part1("./Inputs/Day1.txt");
+        Day3.Part1("./Inputs/Day3.txt");
     }
 }
