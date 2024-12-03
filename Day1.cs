@@ -1,5 +1,5 @@
-
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 public class Day1 {
@@ -17,8 +17,8 @@ public class Day1 {
         Console.WriteLine(first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum());
     }
 
-    public static void Part2(IEnumerable<string> lines) {
-        //IEnumerable<string> lines = File.ReadLines(path);
+    public static int Part2(string path) {
+        IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
         IEnumerable<int> first = lines.Select(line => {
             Match val = getNumbers.Match(line);
@@ -28,10 +28,10 @@ public class Day1 {
             Match val = getNumbers.Match(line);
             return int.Parse(val.Groups["num2"].ToString());
         }).Order();
-        Console.WriteLine(first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum());
+        return first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum();
     }
 
-    public static void part1Testing(string path) {
+    public static void Part1Testing(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         List<int> first = new List<int>();
         List<int> second = new List<int>();
@@ -45,8 +45,8 @@ public class Day1 {
         Console.WriteLine(first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum());
     }
 
-    public static void part2Testing(IEnumerable<string> lines) {
-        //IEnumerable<string> lines = File.ReadLines(path);
+    public static int Part2Testing(string path) {
+        IEnumerable<string> lines = File.ReadLines(path);
         List<int> first = new List<int>();
         Dictionary<int, int> second = new();
         foreach(var line in lines) {
@@ -54,18 +54,30 @@ public class Day1 {
             first.Add(numbers.First());
             second[numbers.Last()] = second.TryGetValue(numbers.Last(), out int val) ? val + 1 : 1;
         }
-        Console.WriteLine(first.Select(inVal => inVal * (second.TryGetValue(inVal, out int val) ? val : 0)).Sum());
+        int sum = 0;
+        foreach(var num in first) {
+            sum += num * (second.TryGetValue(num, out int val) ? val : 0);
+        }
+        //first.ForEach(inVal => sum += inVal * (second.TryGetValue(inVal, out int val) ? val : 0));
+        return sum;
     }
 
     public static void Part2WithTimings(string path) {
-        var lines = File.ReadLines(path).ToList();
+        //var lines = File.ReadLines(path).ToList();
         var watch = Stopwatch.StartNew();
-        part2Testing(lines);
+        int result = Part2Testing(path);
         watch.Stop();
-        Console.WriteLine(watch.ElapsedMilliseconds);
+        Console.WriteLine(result);
+        Console.WriteLine(watch.Elapsed.ToString());
         watch.Restart();
-        Part2(lines);
+        result = Part2Testing(path);
         watch.Stop();
-        Console.WriteLine(watch.ElapsedMilliseconds);
+        Console.WriteLine(result);
+        Console.WriteLine(watch.Elapsed.ToString());
+        watch.Restart();
+        result = Part2Testing(path);
+        watch.Stop();
+        Console.WriteLine(result);
+        Console.WriteLine(watch.Elapsed.ToString());
     }
 }
