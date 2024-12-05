@@ -1,8 +1,15 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 public class Day1 {
+    public static void Run(string part, string path) {
+        if(part == "1") {
+            Part1(path);
+        } else {
+            Part2(path);
+        }
+    }
+
     public static void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
@@ -28,7 +35,9 @@ public class Day1 {
             Match val = getNumbers.Match(line);
             return int.Parse(val.Groups["num2"].ToString());
         }).Order();
-        return first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum();
+        int val = first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum();
+        Console.WriteLine(val);
+        return val;
     }
 
     public static void Part1Testing(string path) {

@@ -1,6 +1,15 @@
 using System.Text.RegularExpressions;
 
 public class Day2 {
+
+    public static void Run(string part, string path) {
+        if(part == "1") {
+            Part1(path);
+        } else {
+            Part2(path);
+        }
+    }
+
     public static void Part1(string path) {
         List<string> lines = File.ReadAllLines(path).ToList();
         IEnumerable<IEnumerable<int>> levels = lines.Select(x => x.Split(' ').Select(int.Parse));

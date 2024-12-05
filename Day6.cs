@@ -1,4 +1,4 @@
-public class IDayX {
+public class Day6 {
 
     public static void Run(string part, string path) {
         if(part == "1") {
@@ -7,6 +7,7 @@ public class IDayX {
             Part2(path);
         }
     }
+
     public static void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
     }

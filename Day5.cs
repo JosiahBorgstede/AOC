@@ -1,9 +1,14 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 
 public class Day5 {
+
+    public static void Run(string part, string path) {
+        if(part == "1") {
+            Part1(path);
+        } else {
+            Part2(path);
+        }
+    }
+
     public static void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
@@ -56,7 +61,7 @@ public class Day5 {
     public static bool CheckSingleSequence(IEnumerable<int> seq, Dictionary<int, List<int>> rules) {
         Dictionary<int, bool> visited = rules.ToDictionary(x => x.Key, x => false);
         foreach (int cur in seq) {
-            if(rules[cur].Any(x => visited[x] == false && seq.Contains(x))) {
+            if(rules[cur].Any(x =>  seq.Contains(x) && visited[x] == false)) {
                 return false;
             }
             visited[cur] = true;

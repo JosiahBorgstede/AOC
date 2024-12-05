@@ -2,6 +2,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 public class Day3 {
+
+    public static void Run(string part, string path) {
+        if(part == "1") {
+            Part1(path);
+        } else {
+            Part2(path);
+        }
+    }
+
     public static void Part1(string path) {
         string lines = File.ReadAllText(path);
         Regex regex = new Regex(@"mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\)");
