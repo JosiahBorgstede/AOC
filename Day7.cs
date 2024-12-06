@@ -1,4 +1,4 @@
-public class DayX {
+public class Day7 {
 
     public static void Run(string part, string path) {
         if(part == "1") {
