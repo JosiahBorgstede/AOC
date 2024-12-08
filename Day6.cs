@@ -1,6 +1,6 @@
-public class Day6 {
+public class Day6 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
@@ -8,7 +8,7 @@ public class Day6 {
         }
     }
 
-    public static void Part1(string path) {
+    public void Part1(string path) {
         string[] lines = File.ReadAllLines(path);
         int[,] result = mapRoute(lines);
         int sum = 0;
@@ -113,7 +113,7 @@ public class Day6 {
         }
     }
 
-    public static void Part2(string path) {
+    public void Part2(string path) {
         string[] lines = File.ReadAllLines(path);
         int sum = 0;
         for(int i = 0; i < lines.Length; i++) {

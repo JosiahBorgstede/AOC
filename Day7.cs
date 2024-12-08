@@ -1,16 +1,16 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-public class Day7 {
+public class Day7 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
             Part2(path);
         }
     }
-    public static void Part1(string path) {
+    public void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;
@@ -41,7 +41,7 @@ public class Day7 {
         return CheckNumberPossible(result - nums.ElementAt(0), nums.Skip(1)) ||
                CheckNumberPossible(result / nums.ElementAt(0), nums.Skip(1));
     }
-    public static void Part2(string path) {
+    public void Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;

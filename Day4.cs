@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 
-public class Day4 {
+public class Day4 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
@@ -10,7 +10,7 @@ public class Day4 {
         }
     }
 
-    public static void Part1(string path) {
+    public void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];
@@ -60,7 +60,7 @@ public class Day4 {
         return found;
     }
 
-    public static void Part2(string path) {
+    public void Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];

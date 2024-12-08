@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-public class Day1 {
-    public static void Run(string part, string path) {
+public class Day1 : IDay {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
@@ -10,7 +10,7 @@ public class Day1 {
         }
     }
 
-    public static void Part1(string path) {
+    public void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
         IEnumerable<int> first = lines.Select(line => {
@@ -24,7 +24,7 @@ public class Day1 {
         Console.WriteLine(first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum());
     }
 
-    public static int Part2(string path) {
+    public void Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
         IEnumerable<int> first = lines.Select(line => {
@@ -37,7 +37,7 @@ public class Day1 {
         }).Order();
         int val = first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum();
         Console.WriteLine(val);
-        return val;
+        return;
     }
 
     public static void Part1Testing(string path) {

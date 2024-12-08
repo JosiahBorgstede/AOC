@@ -1,7 +1,7 @@
 
-public class Day5 {
+public class Day5 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
@@ -9,7 +9,7 @@ public class Day5 {
         }
     }
 
-    public static void Part1(string path) {
+    public void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);
@@ -24,7 +24,7 @@ public class Day5 {
         Console.WriteLine(sum);
     }
 
-    public static void Part2(string path) {
+    public void Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);

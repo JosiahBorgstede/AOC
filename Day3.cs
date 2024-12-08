@@ -1,9 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-public class Day3 {
+public class Day3 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
@@ -11,7 +10,7 @@ public class Day3 {
         }
     }
 
-    public static void Part1(string path) {
+    public void Part1(string path) {
         string lines = File.ReadAllText(path);
         Regex regex = new Regex(@"mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\)");
         int sum = regex.Matches(lines)
@@ -20,7 +19,7 @@ public class Day3 {
         Console.WriteLine(sum);
     }
 
-    public static void Part2(string path) {
+    public void Part2(string path) {
         string line = File.ReadAllText(path);
         Regex regex = new Regex(@"(mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\))|do(n't)?\(\)");
         int sum = 0;

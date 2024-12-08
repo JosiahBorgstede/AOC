@@ -1,16 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.Emit;
 
-public class Day8 {
+public class Day8 : IDay {
 
-    public static void Run(string part, string path) {
+    public void Run(string part, string path) {
         if(part == "1") {
             Part1(path);
         } else {
             Part2(path);
         }
     }
-    public static void Part1(string path) {
+    public void Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;
@@ -20,7 +20,7 @@ public class Day8 {
                                   .Count());
     }
 
-    public static void Part2(string path) {
+    public void Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;
