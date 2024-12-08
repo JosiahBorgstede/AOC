@@ -27,6 +27,9 @@
             case "7":
                 Day7.Run(args[1], pathToInput);
                 break;
+            case "8":
+                Day8.Run(args[1], pathToInput);
+                break;
         }
     }
 }
