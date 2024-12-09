@@ -8,6 +8,7 @@ public class Day9 : IDay {
             Part2(path);
         }
     }
+
     public void Part1(string path) {
         List<int> lines = File.ReadAllText(path).ToList().ConvertAll(x => int.Parse([x]));
         List<(int, int)> linesWithId = new List<(int, int)> ();
