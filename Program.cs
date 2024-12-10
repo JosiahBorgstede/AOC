@@ -15,6 +15,7 @@ public class MainClass {
          ("371", "1229"),
          ("6471961544878", "6511178035564"),
          ("459", "1034"),
+         ("not done", "not done")
         ];
 
     const int TimesToRun = 20;
@@ -36,6 +37,7 @@ public class MainClass {
             8 => new Day8(),
             9 => new Day9(),
             10 => new Day10(),
+            11 => new Day11(),
             _ => throw new Exception(""),
         };
         RunDayAndPart(args[1], dayNum, day, pathToInput);
@@ -86,7 +88,7 @@ public class MainClass {
             stopwatch.Stop();
             runTimes.Add(stopwatch.Elapsed);
             if(result != expectedResult) {
-                Console.WriteLine($"incorrect answer: {result}");
+                Console.WriteLine($"incorrect answer: {result} expected result was {expectedResult}");
                 return;
             }
         }
