@@ -10,16 +10,16 @@ public class Day3 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         string lines = File.ReadAllText(path);
         Regex regex = new Regex(@"mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\)");
         int sum = regex.Matches(lines)
                        .Select(m => int.Parse(m.Groups["dig1"].Value) * int.Parse(m.Groups["dig2"].Value))
                        .Sum();
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         string line = File.ReadAllText(path);
         Regex regex = new Regex(@"(mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\))|do(n't)?\(\)");
         int sum = 0;
@@ -39,6 +39,6 @@ public class Day3 : IDay {
             }
         }
             //sum += matches.Select(m => int.Parse(m.Groups["dig1"].Value) * int.Parse(m.Groups["dig2"].Value)).Sum();
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 }

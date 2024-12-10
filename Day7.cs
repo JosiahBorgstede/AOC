@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 public class Day7 : IDay {
 
@@ -10,7 +8,7 @@ public class Day7 : IDay {
             Part2(path);
         }
     }
-    public void Part1(string path) {
+    public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;
@@ -19,7 +17,7 @@ public class Day7 : IDay {
                 sum += value;
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     private static IEnumerable<(long, IEnumerable<long>)> ExtractValues(IEnumerable<string> lines)
@@ -28,7 +26,6 @@ public class Day7 : IDay {
         foreach(string line in lines) {
             string[] vals = line.Split(": ");
             result.Add((long.Parse(vals[0]), vals[1].Split(' ').Select(long.Parse)));
-            Console.WriteLine(vals[0]);
         }
         return result;
     }
@@ -41,7 +38,7 @@ public class Day7 : IDay {
         return CheckNumberPossible(result - nums.ElementAt(0), nums.Skip(1)) ||
                CheckNumberPossible(result / nums.ElementAt(0), nums.Skip(1));
     }
-    public void Part2(string path) {
+    public string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;
@@ -50,7 +47,7 @@ public class Day7 : IDay {
                 sum += value;
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static bool CheckNumberPossiblePart2(decimal result, IEnumerable<long> nums)

@@ -9,7 +9,7 @@ public class Day5 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);
@@ -21,10 +21,10 @@ public class Day5 : IDay {
                 sum += sequence.ElementAt(sequence.Count()/2);
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);
@@ -39,7 +39,7 @@ public class Day5 : IDay {
                 sum += newSeq.ElementAt(sequence.Count()/2);
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static Dictionary<int, List<int>> GetRules(IEnumerable<string> rules)

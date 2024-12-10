@@ -10,7 +10,7 @@ public class Day1 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
         IEnumerable<int> first = lines.Select(line => {
@@ -21,10 +21,10 @@ public class Day1 : IDay {
             Match val = getNumbers.Match(line);
             return int.Parse(val.Groups["num2"].ToString());
         }).Order();
-        Console.WriteLine(first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum());
+        return first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum().ToString();
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Regex getNumbers = new Regex(@"(?<num1>\d*)   (?<num2>\d*)");
         IEnumerable<int> first = lines.Select(line => {
@@ -36,8 +36,7 @@ public class Day1 : IDay {
             return int.Parse(val.Groups["num2"].ToString());
         }).Order();
         int val = first.Select(inVal => inVal * second.Count(twoVal => twoVal == inVal)).Sum();
-        Console.WriteLine(val);
-        return;
+        return val.ToString();
     }
 
     public static void Part1Testing(string path) {

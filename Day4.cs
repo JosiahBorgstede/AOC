@@ -10,7 +10,7 @@ public class Day4 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];
@@ -25,7 +25,7 @@ public class Day4 : IDay {
                 sum += SearchAround(input, i, j);
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static int SearchAround (char[,] input, int x, int y) {
@@ -60,7 +60,7 @@ public class Day4 : IDay {
         return found;
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];
@@ -75,7 +75,7 @@ public class Day4 : IDay {
                 sum += xSearchAround(input, i, j);
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static int xSearchAround(char[,] input, int x, int y) {

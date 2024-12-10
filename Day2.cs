@@ -9,7 +9,7 @@ public class Day2 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         List<string> lines = File.ReadAllLines(path).ToList();
         IEnumerable<IEnumerable<int>> levels = lines.Select(x => x.Split(' ').Select(int.Parse));
         int safeLines = 0;
@@ -30,10 +30,10 @@ public class Day2 : IDay {
             }
             if (isSafe) {safeLines++;}
         }
-        Console.WriteLine(levels.Count(safeLevel));
+        return levels.Count(safeLevel).ToString();
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         List<string> lines = File.ReadAllLines(path).ToList();
         IEnumerable<IEnumerable<int>> levels = lines.Select(x => x.Split(' ').Select(int.Parse));
         var unsafeLevels = levels.Where(level => !safeLevel(level));
@@ -43,7 +43,7 @@ public class Day2 : IDay {
                 safeLevels++;
             }
         }
-        Console.WriteLine(safeLevels);
+        return safeLevels.ToString();
     }
 
     public static bool safeStep(int prev, int cur, bool increasing) {

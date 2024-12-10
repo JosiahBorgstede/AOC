@@ -9,7 +9,7 @@ public class Day9 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         List<int> lines = File.ReadAllText(path).ToList().ConvertAll(x => int.Parse([x]));
         List<(int, int)> linesWithId = new List<(int, int)> ();
         List<int> fileBlocks = new List<int>();
@@ -45,7 +45,7 @@ public class Day9 : IDay {
         for(int i = 0; i < fileBlocks.Count; i++) {
             sum += fileBlocks[i] * i;
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static int GetFileId(int index) {
@@ -63,7 +63,7 @@ public class Day9 : IDay {
         return fileBlocks;
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         List<int> lines = File.ReadAllText(path).ToList().ConvertAll(x => int.Parse([x]));
         List<(int, int)> linesWithId = [];
         for(int i = 0; i < lines.Count; i++) {
@@ -98,6 +98,6 @@ public class Day9 : IDay {
         for(int i = 0; i < fileBlocks.Count; i++) {
             sum += fileBlocks[i] * i;
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 }

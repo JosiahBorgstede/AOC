@@ -10,24 +10,26 @@ public class Day8 : IDay {
             Part2(path);
         }
     }
-    public void Part1(string path) {
+    public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;
         int maxY = lines.Count() - 1;
-        Console.WriteLine(antennas.SelectMany(x => GetAllAntinodes(x.Value, maxX, maxY))
+        return antennas.SelectMany(x => GetAllAntinodes(x.Value, maxX, maxY))
                                   .Distinct()
-                                  .Count());
+                                  .Count()
+                                  .ToString();
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;
         int maxY = lines.Count() - 1;
-        Console.WriteLine(antennas.SelectMany(x => GetAllAntinodesMax(x.Value, maxX, maxY))
+        return antennas.SelectMany(x => GetAllAntinodesMax(x.Value, maxX, maxY))
                                   .Distinct()
-                                  .Count());
+                                  .Count()
+                                  .ToString();
 
     }
     public static List<(int, int)> GetAllAntinodes(List<(int,int)> ants, int maxX, int maxY) {

@@ -8,7 +8,7 @@ public class Day6 : IDay {
         }
     }
 
-    public void Part1(string path) {
+    public string Part1(string path) {
         string[] lines = File.ReadAllLines(path);
         int[,] result = mapRoute(lines);
         int sum = 0;
@@ -19,7 +19,7 @@ public class Day6 : IDay {
                 }
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 
     public static (int, int) getStartPos(string[] lines) {
@@ -27,7 +27,6 @@ public class Day6 : IDay {
             for( int j = 0; j < lines[i].Length; j++) {
                 if(lines[i][j] == '^')
                 {
-                    Console.WriteLine($"Start Position is ({i},{j})");
                     return (j, i);
                 }
             }
@@ -44,11 +43,9 @@ public class Day6 : IDay {
             visited[curX, curY] = DirectionFlag(visited[curX, curY], mx, my);
             (int nextX, int nextY) = (curX + mx, curY + my);
             if(!InBounds(lines, nextX, nextY)) {
-                Console.WriteLine($"Out of bounds at {nextX} {nextY}");
                 break;
             }
             if(visited[curX,curY] == 15) {
-                Console.WriteLine("looped");
                 break;
             }
             if(lines[nextY][nextX] == '#') {
@@ -113,7 +110,7 @@ public class Day6 : IDay {
         }
     }
 
-    public void Part2(string path) {
+    public string Part2(string path) {
         string[] lines = File.ReadAllLines(path);
         int sum = 0;
         for(int i = 0; i < lines.Length; i++) {
@@ -123,6 +120,6 @@ public class Day6 : IDay {
                 }
             }
         }
-        Console.WriteLine(sum);
+        return sum.ToString();
     }
 }
