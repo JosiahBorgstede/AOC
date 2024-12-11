@@ -7,7 +7,7 @@ public class Day10 : IDay
         for(int i = 0; i < map.GetLength(0); i++) {
             for(int j = 0; j < map.GetLength(1); j++) {
                 if(map[i, j] == 0) {
-                    sum += NinesReached(i, j, map, -1).Distinct().Count();
+                    sum += NinesReached(i, j, map, 0).Distinct().Count();
                 }
 
             }
@@ -25,21 +25,20 @@ public class Day10 : IDay
         return map;
     }
 
-    public List<(int, int)> NinesReached(int x, int y, int[,] map, int prevVal) {
+    public List<(int, int)> NinesReached(int x, int y, int[,] map, int searchVal) {
         if(x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1)) {
             return [];
         }
-        int curVal = map[x,y];
-        if(curVal != prevVal + 1) {
+        if(map[x,y] != searchVal) {
             return [];
         }
-        if(curVal == 9) {
+        if(map[x,y] == 9) {
             return [(x, y)];
         }
-        return  [..NinesReached(x + 1, y, map, curVal),
-                 ..NinesReached(x - 1, y, map, curVal),
-                 ..NinesReached(x, y + 1, map, curVal),
-                 ..NinesReached(x, y - 1, map, curVal)];
+        return  [..NinesReached(x + 1, y, map, searchVal + 1),
+                 ..NinesReached(x - 1, y, map, searchVal + 1),
+                 ..NinesReached(x, y + 1, map, searchVal + 1),
+                 ..NinesReached(x, y - 1, map, searchVal + 1)];
     }
 
     public string Part2(string path)
@@ -49,7 +48,7 @@ public class Day10 : IDay
         for(int i = 0; i < map.GetLength(0); i++) {
             for(int j = 0; j < map.GetLength(1); j++) {
                 if(map[i, j] == 0) {
-                    sum += NinesReached(i, j, map, -1).Count();
+                    sum += NinesReached(i, j, map, 0).Count();
                 }
 
             }
