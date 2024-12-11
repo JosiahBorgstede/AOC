@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 public class MainClass {
-
-    const int TimesToRun = 20;
+    const int TimesToRun = 50;
     public static void Main(string[] args) {
         if(args.Length < 2) {
             Console.WriteLine("missing args");
@@ -26,55 +24,36 @@ public class MainClass {
             12 => new Day12(),
             _ => throw new Exception(""),
         };
-        RunDayAndPart(args[1], day, pathToInput);
+        RunDayAndPart(args[1], day, pathToInput)();
     }
 
-    public static void RunDayAndPart(string arg2, IDay day, string inputPath) {
-        switch (arg2) {
-            case "1":
-                Console.WriteLine(day.Part1(inputPath));
-                break;
-            case "2":
-                Console.WriteLine(day.Part2(inputPath));
-                break;
-            case "1T":
-                Console.WriteLine($"Timing day {day.DayNum} part 1");
-                TimeDay(day, 1, TimesToRun, inputPath);
-                break;
-            case "2T":
-                Console.WriteLine($"Timing day {day.DayNum} part 2");
-                TimeDay(day, 2, TimesToRun, inputPath);
-                break;
-            case "T":
-                Console.WriteLine($"Timing day {day.DayNum}");
-                Console.WriteLine("Part 1");
-                TimeDay(day, 1, TimesToRun, inputPath);
-                Console.WriteLine("Part 2");
-                TimeDay(day, 2, TimesToRun, inputPath);
-                break;
-        }
-    }
+    public static Action RunDayAndPart(string arg2, IDay day, string inputPath) => arg2 switch {
+            "1" => () => Console.WriteLine(day.Part1(inputPath)),
+            "2" => () => Console.WriteLine(day.Part1(inputPath)),
+            "1T" => () => TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath)),
+            "2T" => () => TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath)),
+            "T" => () => {TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath));
+                          TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath));},
+            "TS" => () => {TimeDay(null, TimesToRun, () => day.Part1(inputPath));
+                          TimeDay(null, TimesToRun, () => day.Part2(inputPath));},
+            _ => throw new Exception("incorrect value for what to run"),
+    };
 
-    public static void TimeDay(IDay dayToRun, int part, int times, string path) {
+    public static void TimeDay(string? expectedResult, int times, Func<string> toRun) {
         Stopwatch stopwatch = Stopwatch.StartNew();
-        Func<string, string> toRun = part switch {
-            1 => dayToRun.Part1,
-            2 => dayToRun.Part2,
-            _ => dayToRun.Part1
-        };
         List<TimeSpan> runTimes = [];
         Console.WriteLine($"Performing {times} runs");
         for (int i = 0; i < times; i++) {
             stopwatch.Restart();
-            string result = toRun(path);
+            string result = toRun();
             stopwatch.Stop();
             runTimes.Add(stopwatch.Elapsed);
-            if(result != dayToRun.GetExpectedResult(part)) {
-                Console.WriteLine($"incorrect answer: {result} expected result was {dayToRun.GetExpectedResult(part)}");
+            if(expectedResult != null && result != expectedResult) {
+                Console.WriteLine($"incorrect answer: {result} expected result was {expectedResult}");
                 return;
             }
         }
-
-        Console.WriteLine("Average time was " + TimeSpan.FromTicks((long) runTimes.Average(x => x.Ticks)));
+        Console.WriteLine("Average time was " +
+                          TimeSpan.FromTicks((long) runTimes.Average(x => x.Ticks)));
     }
 }

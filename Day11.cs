@@ -11,27 +11,23 @@ public class Day11 : IDay {
     public string Part1(string path)
     {
         string line = File.ReadAllText(path);
-        List<long> startStones = line.Split(" ").Select(long.Parse).ToList();
+        Dictionary<long, long> startStones = line.Split(" ").ToDictionary(x => long.Parse(x), x =>(long) 1);
         for(int i = 0; i < 25; i++) {
-            startStones = BlinkOnce(startStones);
+            startStones = processStonesBatch(startStones);
         }
 
-        return startStones.Count.ToString();
+        return startStones.Select(x => x.Value).Sum().ToString();
     }
 
     public string Part2(string path)
     {
         string line = File.ReadAllText(path);
-        List<long> startStones = line.Split(" ").Select(long.Parse).ToList();
-        Dictionary<long, long> stonesDict = new();
-        foreach(var stone in startStones) {
-            stonesDict[stone] = 1;
-        }
+        Dictionary<long, long> startStones = line.Split(" ").ToDictionary(x => long.Parse(x), x =>(long) 1);
         for(int i = 0; i < 75; i++) {
-            stonesDict = processStonesBatch(stonesDict);
+            startStones = processStonesBatch(startStones);
         }
 
-        return stonesDict.Select(x => x.Value).Sum().ToString();
+        return startStones.Select(x => x.Value).Sum().ToString();
     }
 
     public static List<long> BlinkOnce(List<long> stones) {
