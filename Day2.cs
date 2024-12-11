@@ -1,12 +1,12 @@
 
 public class Day2 : IDay {
+    public int DayNum => 2;
 
-    public void Run(string part, string path) {
-        if(part == "1") {
-            Part1(path);
-        } else {
-            Part2(path);
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "686";
         }
+        return "717";
     }
 
     public string Part1(string path) {

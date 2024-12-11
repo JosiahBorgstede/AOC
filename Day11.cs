@@ -1,5 +1,13 @@
-public class Day11 : IDay
-{
+public class Day11 : IDay {
+    public int DayNum => 11;
+
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "194782";
+        }
+        return "233007586663131";
+    }
+
     public string Part1(string path)
     {
         string line = File.ReadAllText(path);

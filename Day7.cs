@@ -1,13 +1,14 @@
 
 public class Day7 : IDay {
+    public int DayNum => 7;
 
-    public void Run(string part, string path) {
-        if(part == "1") {
-            Part1(path);
-        } else {
-            Part2(path);
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "14711933466277";
         }
+        return "286580387663654";
     }
+
     public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);

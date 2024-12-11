@@ -1,15 +1,13 @@
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Emit;
-
 public class Day8 : IDay {
+    public int DayNum => 8;
 
-    public void Run(string part, string path) {
-        if(part == "1") {
-            Part1(path);
-        } else {
-            Part2(path);
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "371";
         }
+        return "1229";
     }
+
     public string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);

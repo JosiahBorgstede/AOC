@@ -1,13 +1,12 @@
 using System.Text.RegularExpressions;
-
 public class Day3 : IDay {
+    public int DayNum => 3;
 
-    public void Run(string part, string path) {
-        if(part == "1") {
-            Part1(path);
-        } else {
-            Part2(path);
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "178794710";
         }
+        return "76729637";
     }
 
     public string Part1(string path) {

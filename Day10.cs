@@ -1,5 +1,13 @@
-public class Day10 : IDay
-{
+public class Day10 : IDay {
+    public int DayNum => 10;
+
+    public string GetExpectedResult(int part) {
+        if (part == 1) {
+            return "459";
+        }
+        return "1034";
+    }
+
     public string Part1(string path)
     {
         int[,] map = GetMap(File.ReadLines(path));
@@ -55,4 +63,6 @@ public class Day10 : IDay
         }
         return sum.ToString();
     }
+
+    
 }

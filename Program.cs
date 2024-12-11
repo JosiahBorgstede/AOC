@@ -3,34 +3,6 @@ using System.Diagnostics;
 
 public class MainClass {
 
-    public static readonly (string, string)[] Answers =
-        [
-            //day 0 (for easier indicies)
-            ("", ""),
-            //day 1
-            ("1941353", "22539317"),
-            //day 2
-            ("686", "717"),
-            //day 3
-            ("178794710", "76729637"),
-            //day 4
-            ("2633", "1936"),
-            //day 5
-            ("6951", "4121"),
-            //day 6
-            ("5534", "2262"),
-            //day 7
-            ("14711933466277", "286580387663654"),
-            //day 8
-            ("371", "1229"),
-            //day 9
-            ("6471961544878", "6511178035564"),
-            //day 10
-            ("459", "1034"),
-            //day 11
-            ("194782", "233007586663131"),
-        ];
-
     const int TimesToRun = 20;
     public static void Main(string[] args) {
         if(args.Length < 2) {
@@ -51,12 +23,13 @@ public class MainClass {
             9 => new Day9(),
             10 => new Day10(),
             11 => new Day11(),
+            12 => new Day12(),
             _ => throw new Exception(""),
         };
-        RunDayAndPart(args[1], dayNum, day, pathToInput);
+        RunDayAndPart(args[1], day, pathToInput);
     }
 
-    public static void RunDayAndPart(string arg2, int dayNum, IDay day, string inputPath) {
+    public static void RunDayAndPart(string arg2, IDay day, string inputPath) {
         switch (arg2) {
             case "1":
                 Console.WriteLine(day.Part1(inputPath));
@@ -65,28 +38,24 @@ public class MainClass {
                 Console.WriteLine(day.Part2(inputPath));
                 break;
             case "1T":
-                Console.WriteLine($"Timing day {dayNum} part 1");
-                TimeDay(day, 1, TimesToRun, inputPath, GetExpectedResult(dayNum, 1));
+                Console.WriteLine($"Timing day {day.DayNum} part 1");
+                TimeDay(day, 1, TimesToRun, inputPath);
                 break;
             case "2T":
-                Console.WriteLine($"Timing day {dayNum} part 2");
-                TimeDay(day, 2, TimesToRun, inputPath, GetExpectedResult(dayNum, 2));
+                Console.WriteLine($"Timing day {day.DayNum} part 2");
+                TimeDay(day, 2, TimesToRun, inputPath);
                 break;
             case "T":
-                Console.WriteLine($"Timing day {dayNum}");
+                Console.WriteLine($"Timing day {day.DayNum}");
                 Console.WriteLine("Part 1");
-                TimeDay(day, 1, TimesToRun, inputPath, GetExpectedResult(dayNum, 1));
+                TimeDay(day, 1, TimesToRun, inputPath);
                 Console.WriteLine("Part 2");
-                TimeDay(day, 2, TimesToRun, inputPath, GetExpectedResult(dayNum, 2));
+                TimeDay(day, 2, TimesToRun, inputPath);
                 break;
         }
     }
 
-    public static string GetExpectedResult(int dayNum, int partNum) {
-        return partNum == 1 ? Answers[dayNum].Item1 : Answers[dayNum].Item2;
-    }
-
-    public static void TimeDay(IDay dayToRun, int part, int times, string path, string expectedResult) {
+    public static void TimeDay(IDay dayToRun, int part, int times, string path) {
         Stopwatch stopwatch = Stopwatch.StartNew();
         Func<string, string> toRun = part switch {
             1 => dayToRun.Part1,
@@ -100,8 +69,8 @@ public class MainClass {
             string result = toRun(path);
             stopwatch.Stop();
             runTimes.Add(stopwatch.Elapsed);
-            if(result != expectedResult) {
-                Console.WriteLine($"incorrect answer: {result} expected result was {expectedResult}");
+            if(result != dayToRun.GetExpectedResult(part)) {
+                Console.WriteLine($"incorrect answer: {result} expected result was {dayToRun.GetExpectedResult(part)}");
                 return;
             }
         }
