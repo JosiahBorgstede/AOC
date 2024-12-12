@@ -29,7 +29,7 @@ public class MainClass {
 
     public static Action RunDayAndPart(string arg2, IDay day, string inputPath) => arg2 switch {
             "1" => () => Console.WriteLine(day.Part1(inputPath)),
-            "2" => () => Console.WriteLine(day.Part1(inputPath)),
+            "2" => () => Console.WriteLine(day.Part2(inputPath)),
             "1T" => () => TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath)),
             "2T" => () => TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath)),
             "T" => () => {TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath));
