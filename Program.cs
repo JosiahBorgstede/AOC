@@ -22,17 +22,22 @@ public class MainClass {
             10 => new Day10(),
             11 => new Day11(),
             12 => new Day12(),
+            13 => new Day13(),
             _ => throw new Exception(""),
         };
         RunDayAndPart(args[1], day, pathToInput)();
     }
 
     public static Action RunDayAndPart(string arg2, IDay day, string inputPath) => arg2 switch {
-            "1" => () => Console.WriteLine(day.Part1(inputPath)),
-            "2" => () => Console.WriteLine(day.Part2(inputPath)),
-            "1T" => () => TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath)),
-            "2T" => () => TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath)),
-            "T" => () => {TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath));
+            "1"  => () => Console.WriteLine(day.Part1(inputPath)),
+            "2"  => () => Console.WriteLine(day.Part2(inputPath)),
+            "1T" => () => {Console.WriteLine($"Timing day {day.DayNum} part 1");
+                           TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath));},
+            "2T" => () => {Console.WriteLine($"Timing day {day.DayNum} part 2");
+                           TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath));},
+            "T"  => () => {Console.WriteLine($"Timing day {day.DayNum} part 1");
+                          TimeDay(day.GetExpectedResult(1), TimesToRun, () => day.Part1(inputPath));
+                          Console.WriteLine($"Timing day {day.DayNum} part 2");
                           TimeDay(day.GetExpectedResult(2), TimesToRun, () => day.Part2(inputPath));},
             "TS" => () => {TimeDay(null, TimesToRun, () => day.Part1(inputPath));
                           TimeDay(null, TimesToRun, () => day.Part2(inputPath));},
