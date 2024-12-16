@@ -1,5 +1,3 @@
-using System.Net.Mail;
-using System.Security.Cryptography.X509Certificates;
 
 public class Day15 : IDay
 {
@@ -8,9 +6,9 @@ public class Day15 : IDay
     public string GetExpectedResult(int part)
     {
         if (part == 1) {
-            return "not done";
+            return "1430536";
         }
-        return "not done";
+        return "1452348";
     }
 
     public string Part1(string path)
@@ -136,32 +134,6 @@ public class Day15 : IDay
         }
         map[botX, botY] = '.';
         return map;
-    }
-
-    public static bool VerticalMovePossible(List<int> curCols, int curY, char[,] map, char dir) {
-        var move = GetDirection(dir);
-        (int nextX, int nextY) = move((curCols[0], curY));
-        List<int> nextCols = [];
-        if(nextY < 0 || nextY > map.GetLength(1)) {
-            return false;
-        }
-        foreach(int col in curCols) {
-            if(map[col, nextY] == '#') {
-                return false;
-            }
-            if(map[col, nextY] == '[') {
-                nextCols.Add(col + 1);
-                nextCols.Add(col);
-            }
-            if(map[col, curY] == ']') {
-                nextCols.Add(col - 1);
-                nextCols.Add(col);
-            }
-        }
-        if(nextCols.Count == 0) {
-            return true;
-        }
-        return VerticalMovePossible(nextCols, nextY, map, dir);
     }
 
     public static char[,] MakeMovementVertical(int botX, int botY, char[,] map, char dir) {
