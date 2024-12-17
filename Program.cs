@@ -26,7 +26,8 @@ public class MainClass {
             14 => new Day14(),
             15 => new Day15(),
             16 => new Day16(),
-            _ => throw new Exception(""),
+            17 => new Day17(),
+            _ => throw new Exception("Day not added"),
         };
         RunDayAndPart(args[1], day, pathToInput)();
     }

@@ -13,7 +13,7 @@ public class Day16 : IDay
         if(part == 1) {
             return "109496";
         }
-        return "not done";
+        return "551";
     }
 
     public string Part1(string path)
