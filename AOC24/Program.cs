@@ -28,13 +28,13 @@ public static class MainClass {
         listVersionsCommand.SetHandler(ListVersions, dayArgument);
 
         var compareSpeedsCommand = new Command("compare", "compares the speed of 2 parts of a day");
-        var typeOptions = new Option<string[]>("--styles", () => [], "the first version to test. Must be configured in the Day constructor");
+        var typeArgument= new Argument<List<string>>("styles", () => [], "the first version to test. Must be configured in the Day constructor");
         var comparePartArgument = new Argument<int>("part", "the part where the types to comapre are, must be specified");
         partArgument.FromAmong("1", "2");
         compareSpeedsCommand.AddArgument(dayArgument);
-        compareSpeedsCommand.AddArgument(partArgument);
-        compareSpeedsCommand.AddOption(typeOptions);
-        compareSpeedsCommand.SetHandler(CompareParts, dayArgument, partArgument, typeOptions, fileOption, runsOption);
+        compareSpeedsCommand.AddArgument(comparePartArgument);
+        compareSpeedsCommand.AddArgument(typeArgument);
+        compareSpeedsCommand.SetHandler(CompareParts, dayArgument, comparePartArgument, typeArgument, fileOption, runsOption);
 
         var rootCommand = new RootCommand("Running a day of the Avent of Code challenge of 2024");
         rootCommand.AddArgument(dayArgument);
@@ -52,14 +52,15 @@ public static class MainClass {
         await rootCommand.InvokeAsync(args);
     }
 
-    private static void CompareParts(int dayArgument, int part, string[] types, string filePath, int runs)
+    private static void CompareParts(int dayArgument, int part, List<string> types, string filePath, int runs)
     {
-        if(types.Length == 0) {
+        if(types.Count == 0) {
             RunningTheDay(dayArgument, -part, filePath, checkRes: true, timeRun: true, times: runs);
         } else {
             foreach(var type in types) {
                 try{
-                RunningTheDay(dayArgument, part, filePath, type, true, true, runs);
+                    Console.WriteLine($"Version: {type}");
+                    RunningTheDay(dayArgument, part, filePath, type, true, true, runs);
                 } catch {
                     Console.WriteLine($"Invalid type given: {type}");
                 }
