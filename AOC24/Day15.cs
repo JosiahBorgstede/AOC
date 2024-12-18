@@ -1,18 +1,10 @@
 namespace AOC24;
 
-public class Day15 : IDay
+public class Day15 : ADay
 {
-    public int DayNum => 15;
+    public override int DayNum => 15;
 
-    public string GetExpectedResult(int part)
-    {
-        if (part == 1) {
-            return "1430536";
-        }
-        return "1452348";
-    }
-
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         IEnumerable<string> lines = File.ReadLines(path);
         char[,] map = MakeMap(lines.TakeWhile(x => x.Length > 0));
@@ -204,7 +196,7 @@ public class Day15 : IDay
         _ => throw new NotImplementedException(),
     };
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         IEnumerable<string> lines = File.ReadLines(path);
         char[,] map = MakeMapWide(lines.TakeWhile(x => x.Length > 0));

@@ -3,17 +3,11 @@ namespace AOC24;
 using System.Diagnostics;
 using System.IO.Pipes;
 
-public class Day12 : IDay {
-    public int DayNum => 12;
+public class Day12 : ADay {
+    public override int DayNum => 12;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "1424472";
-        }
-        return "870202";
-    }
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         char[,] map = GetMap(File.ReadAllLines(path));
         List<List<(int, int)>> regions = GetRegions(map);
@@ -143,7 +137,7 @@ public class Day12 : IDay {
     }
 
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         char[,] map = GetMap(File.ReadAllLines(path));
         List<List<(int, int)>> regions = GetRegions(map);

@@ -1,23 +1,17 @@
 namespace AOC24;
 
-using System.Collections;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 public record Registers(long A, long B, long C);
-public class Day17 : IDay
+public class Day17 : ADay
 {
-    public int DayNum => 17;
+    public override int DayNum => 17;
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "4,1,5,3,1,5,3,5,7";
-        }
-        return "164542125272765";
+    public Day17() : base() {
+        _part2Versions.Add("old", new("old", "the older version of part 2 that uses brute force and is based on my personal input, therefore not scalable", Part2Old));
     }
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         List<string> lines = File.ReadLines(path).ToList();
         int[] regs = new int[3];
@@ -108,7 +102,7 @@ public class Day17 : IDay
         List<int> program = lines[4].Split(": ")[1].Split(",").Select(int.Parse).ToList();
         registers = registers with {A = (long)Math.Pow(8, 15)};
         List<long> outputs = RunProgram(program, registers);
-        writeOutput(outputs);
+        //writeOutput(outputs);
         for(int j = program.Count - 1; j >= 0; j--) {
             if(j == 2) {
                 break;
@@ -118,7 +112,7 @@ public class Day17 : IDay
                 registers = registers with {A = curA + (long)Math.Pow(8, j-1)};
                 Console.WriteLine("value of A:" + registers.A);
                 outputs = RunProgram(program, registers);
-                writeOutput(outputs);
+                //writeOutput(outputs);
             }
         }
         while(!outputs.SequenceEqual(program.ConvertAll<long>(x => x))) {
@@ -201,7 +195,7 @@ public class Day17 : IDay
         _ => throw new Exception("unknown operand"),
     };
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         List<string> lines = File.ReadLines(path).ToList();
         int[] regs = new int[3];
@@ -212,15 +206,15 @@ public class Day17 : IDay
         Registers registers = new(regs[0], regs[1], regs[2]);
         List<int> program = lines[4].Split(": ")[1].Split(",").Select(int.Parse).ToList();
         string expanded = ExpandProg(program, registers);
-        Console.Write(expanded);
+        //Console.Write(expanded);
         for(int i = 0; i < 64; i++) {
             long res = FastCalcA(i);
-            Console.Write(res + " ");
+            //Console.Write(res + " ");
         }
         return registers.A.ToString();
     }
 
-    public static long FastCalcA(long A) 
+    public static long FastCalcA(long A)
     {
         return (((A ^ 1) ^ 5) ^ (A / (long)Math.Pow(2,A ^ 1))) % 8;
     }

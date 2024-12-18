@@ -5,19 +5,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 public record Robot((int x, int y) startPos, (int dx, int dy) velocity);
-public class Day14 : IDay
+public class Day14 : ADay
 {
-    public int DayNum => 14;
+    public override int DayNum => 14;
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "228410028";
-        }
-        return "8258";
-    }
-
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         List<Robot> robots = GetRobots(File.ReadLines(path));
         List<(int, int)> finalPositions = [];
@@ -56,7 +48,7 @@ public class Day14 : IDay
         return (x, y);
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         List<Robot> robots = GetRobots(File.ReadLines(path));
         int cur = 0;

@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day9 : IDay {
-    public int DayNum => 9;
+public class Day9 : ADay {
+    public override int DayNum => 9;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "6471961544878";
-        }
-        return "6511178035564";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         List<int> lines = File.ReadAllText(path).ToList().ConvertAll(x => int.Parse([x]));
         List<(int, int)> linesWithId = new List<(int, int)> ();
         List<int> fileBlocks = new List<int>();
@@ -64,7 +57,7 @@ public class Day9 : IDay {
         return fileBlocks;
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         List<int> lines = File.ReadAllText(path).ToList().ConvertAll(x => int.Parse([x]));
         List<(int, int)> linesWithId = [];
         for(int i = 0; i < lines.Count; i++) {

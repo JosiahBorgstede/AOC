@@ -2,17 +2,10 @@ namespace AOC24;
 
 using System.Text.RegularExpressions;
 
-public class Day3 : IDay {
-    public int DayNum => 3;
+public class Day3 : ADay {
+    public override int DayNum => 3;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "178794710";
-        }
-        return "76729637";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         string lines = File.ReadAllText(path);
         Regex regex = new Regex(@"mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\)");
         int sum = regex.Matches(lines)
@@ -21,7 +14,7 @@ public class Day3 : IDay {
         return sum.ToString();
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         string line = File.ReadAllText(path);
         Regex regex = new Regex(@"(mul\((?<dig1>\d{1,3}),(?<dig2>\d{1,3})\))|do(n't)?\(\)");
         int sum = 0;

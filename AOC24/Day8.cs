@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day8 : IDay {
-    public int DayNum => 8;
+public class Day8 : ADay {
+    public override int DayNum => 8;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "371";
-        }
-        return "1229";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;
@@ -21,7 +14,7 @@ public class Day8 : IDay {
                                   .ToString();
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         Dictionary<char, List<(int, int)>> antennas = GetAntennas(lines);
         int maxX = lines.ElementAt(0).Length -1;

@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day11 : IDay {
-    public int DayNum => 11;
+public class Day11 : ADay {
+    public override int DayNum => 11;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "194782";
-        }
-        return "233007586663131";
-    }
-
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         string line = File.ReadAllText(path);
         Dictionary<long, long> startStones = line.Split(" ").ToDictionary(x => long.Parse(x), x =>(long) 1);
@@ -21,7 +14,7 @@ public class Day11 : IDay {
         return startStones.Select(x => x.Value).Sum().ToString();
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         string line = File.ReadAllText(path);
         Dictionary<long, long> startStones = line.Split(" ").ToDictionary(x => long.Parse(x), x =>(long) 1);

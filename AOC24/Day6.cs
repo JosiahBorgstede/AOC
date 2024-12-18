@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day6 : IDay {
-    public int DayNum => 6;
+public class Day6 : ADay {
+    public override int DayNum => 6;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "5534";
-        }
-        return "2262";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         string[] lines = File.ReadAllLines(path);
         int[,] result = mapRoute(lines);
         int sum = 0;
@@ -112,7 +105,7 @@ public class Day6 : IDay {
         }
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         string[] lines = File.ReadAllLines(path);
         int sum = 0;
         for(int i = 0; i < lines.Length; i++) {

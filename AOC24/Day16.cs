@@ -3,22 +3,15 @@ namespace AOC24;
 using System.Net.Mail;
 using System.Reflection.Metadata;
 public record MazePosition(int vertScore, int horzScore);
-public class Day16 : IDay
+public class Day16 : ADay
 {
-    public int DayNum => 16;
+    public override int DayNum => 16;
 
     public (int x, int y) StartPos = (0, 0);
     public (int x, int y) EndPos = (0, 0);
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "109496";
-        }
-        return "551";
-    }
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         char[,] map = MakeMap(File.ReadLines(path));
         var values = MakeResultMap(map);
@@ -153,7 +146,7 @@ public class Day16 : IDay
         return new MazePosition(minVert, minHorz);
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         char[,] map = MakeMap(File.ReadLines(path));
         var values = MakeResultMap(map);
@@ -163,8 +156,8 @@ public class Day16 : IDay
         }
         IEnumerable<(int, int)> bestSpots = DetermineBestSpots(values, map, EndPos.x, EndPos.y).Distinct();
         //DrawMapBestPath(values, map, bestSpots);
-        DrawMapResults(values, map);
-        DrawMapBestPath(values, map, bestSpots);
+        //DrawMapResults(values, map);
+        //DrawMapBestPath(values, map, bestSpots);
         return bestSpots.Count().ToString();
     }
 

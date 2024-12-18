@@ -1,24 +1,18 @@
 namespace AOC24;
 
-public class Day19 : IDay
+public class Day19 : ADay
 {
-    public int DayNum => 19;
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "not done";
-        }
-        return "not done";
-    }
+    public Day19() : base(){}
+    public override int DayNum => 19;
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         IEnumerable<string> lines = File.ReadAllLines(path);
         return "";
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         IEnumerable<string> lines = File.ReadAllLines(path);
         return "";

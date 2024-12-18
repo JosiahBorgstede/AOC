@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day5 : IDay {
-    public int DayNum => 5;
+public class Day5 : ADay {
+    public override int DayNum => 5;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "6951";
-        }
-        return "4121";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);
@@ -25,7 +18,7 @@ public class Day5 : IDay {
         return sum.ToString();
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<string> rules = lines.TakeWhile(x => x.Length != 0);
         IEnumerable<string> seqs = lines.SkipWhile(x => x.Length != 0).Skip(1);

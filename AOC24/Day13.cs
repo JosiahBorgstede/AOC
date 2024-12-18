@@ -10,19 +10,11 @@ public record Machine (
     (int x, int y) AButton,
     (int x, int y) BButton,
     (int x, int y) Prize);
-public class Day13 : IDay
+public class Day13 : ADay
 {
-    public int DayNum => 13;
+    public override int DayNum => 13;
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "34393";
-        }
-        return "34393";
-    }
-
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         List<Machine> machines = GetMachines(File.ReadAllText(path));
         long sum = 0;
@@ -71,7 +63,7 @@ public class Day13 : IDay
         return machines;
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         List<Machine> machines = GetMachines(File.ReadAllText(path));
         long sum = 0;

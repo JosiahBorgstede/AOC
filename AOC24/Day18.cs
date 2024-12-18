@@ -1,25 +1,25 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace AOC24;
 
+using System.Diagnostics;
 using AOCUtil;
-public class Day18 : IDay
-{
-    public int DayNum => 18;
 
-    public string GetExpectedResult(int part)
-    {
-        if(part == 1) {
-            return "304";
-        }
-        return "50,28";
+public class Day18 : ADay
+{
+    public override int DayNum => 18;
+
+    public Day18() : base() {
+        _part2Versions.Add("faster", new("faster", "An attempt to make part 2 faster by computing the articulation vertices initially", Part2Faster));
     }
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         IEnumerable<string> lines = File.ReadAllLines(path);
         IEnumerable<string> firstKilo = lines.Take(1024);
         IEnumerable<(int, int)> points = GetPoints(firstKilo);
         int[,] minDist = GetMinDistances(points, 71, 71);
-        MapHelper.DrawMap<int>(minDist, HowToDraw);
+        //MapHelper.DrawMap<int>(minDist, HowToDraw);
         return minDist[70, 70].ToString();
     }
 
@@ -77,7 +77,7 @@ public class Day18 : IDay
                     .Select(arr => (int.Parse(arr[0]), int.Parse(arr[1])));
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         IEnumerable<string> lines = File.ReadAllLines(path);
         IEnumerable<string> firstKilo = lines.Take(1024);
@@ -87,10 +87,13 @@ public class Day18 : IDay
             toAdd++;
             firstKilo = lines.Take(toAdd);
             points = GetPoints(firstKilo);
-            Console.WriteLine(toAdd);
         }
         string badPoint = lines.ElementAt(toAdd - 1);
         return badPoint;
+    }
+
+    public string Part2Faster(string path) {
+        return "not done yet";
     }
 
     public bool StartConnectedToEnd(IEnumerable<(int, int)> corrupted, int maxX, int maxY) {

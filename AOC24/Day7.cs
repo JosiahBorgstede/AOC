@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day7 : IDay {
-    public int DayNum => 7;
+public class Day7 : ADay {
+    public override int DayNum => 7;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "14711933466277";
-        }
-        return "286580387663654";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;
@@ -40,7 +33,7 @@ public class Day7 : IDay {
         return CheckNumberPossible(result - nums.ElementAt(0), nums.Skip(1)) ||
                CheckNumberPossible(result / nums.ElementAt(0), nums.Skip(1));
     }
-    public string Part2(string path) {
+    public override string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
         long sum = 0;

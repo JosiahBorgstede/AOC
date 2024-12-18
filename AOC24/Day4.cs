@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day4 : IDay {
-    public int DayNum => 4;
+public class Day4 : ADay {
+    public override int DayNum => 4;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "2633";
-        }
-        return "1936";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];
@@ -60,7 +53,7 @@ public class Day4 : IDay {
         return found;
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         int LineLength = lines.First().Length;
         char[,] input = new char[lines.First().Length+6, lines.Count()+6];

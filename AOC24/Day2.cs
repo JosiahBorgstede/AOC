@@ -1,16 +1,9 @@
 namespace AOC24;
 
-public class Day2 : IDay {
-    public int DayNum => 2;
+public class Day2 : ADay {
+    public override int DayNum => 2;
 
-    public string GetExpectedResult(int part) {
-        if (part == 1) {
-            return "686";
-        }
-        return "717";
-    }
-
-    public string Part1(string path) {
+    public override string Part1(string path) {
         List<string> lines = File.ReadAllLines(path).ToList();
         IEnumerable<IEnumerable<int>> levels = lines.Select(x => x.Split(' ').Select(int.Parse));
         int safeLines = 0;
@@ -34,7 +27,7 @@ public class Day2 : IDay {
         return levels.Count(safeLevel).ToString();
     }
 
-    public string Part2(string path) {
+    public override string Part2(string path) {
         List<string> lines = File.ReadAllLines(path).ToList();
         IEnumerable<IEnumerable<int>> levels = lines.Select(x => x.Split(' ').Select(int.Parse));
         var unsafeLevels = levels.Where(level => !safeLevel(level));

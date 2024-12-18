@@ -1,7 +1,7 @@
 namespace AOC24;
 
-public class Day10 : IDay {
-    public int DayNum => 10;
+public class Day10 : ADay {
+    public override int DayNum => 10;
 
     public string GetExpectedResult(int part) {
         if (part == 1) {
@@ -10,7 +10,7 @@ public class Day10 : IDay {
         return "1034";
     }
 
-    public string Part1(string path)
+    public override string Part1(string path)
     {
         int[,] map = GetMap(File.ReadLines(path));
         int sum = 0;
@@ -51,7 +51,7 @@ public class Day10 : IDay {
                  ..NinesReached(x, y - 1, map, searchVal + 1)];
     }
 
-    public string Part2(string path)
+    public override string Part2(string path)
     {
         int[,] map = GetMap(File.ReadLines(path));
         int sum = 0;
@@ -65,6 +65,4 @@ public class Day10 : IDay {
         }
         return sum.ToString();
     }
-
-    
 }
