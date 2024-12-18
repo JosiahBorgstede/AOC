@@ -1,3 +1,4 @@
-/bin/**
-/obj/**
-/Inputs/**
+**/bin/**
+**/obj/**
+**/Inputs/**
+**/settings.json
