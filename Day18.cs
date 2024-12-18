@@ -1,3 +1,4 @@
+using AOCUtil;
 public class Day18 : IDay
 {
     public int DayNum => 18;
@@ -16,25 +17,18 @@ public class Day18 : IDay
         IEnumerable<string> firstKilo = lines.Take(1024);
         IEnumerable<(int, int)> points = GetPoints(firstKilo);
         int[,] minDist = GetMinDistances(points, 71, 71);
+        MapHelper.DrawMap<int>(minDist, HowToDraw);
         return minDist[70, 70].ToString();
     }
 
-    public void PrintDistMap(int[,] map) {
-        for(int i = 0; i < map.GetLength(1); i++) {
-            for(int j = 0; j < map.GetLength(0); j++) {
-                if(map[j,i] == int.MaxValue) {
-                    Console.Write("#".PadRight(4));
-                } else {
-                    Console.Write(map[j,i].ToString().PadRight(4));
-                }
-            }
-            Console.WriteLine();
-        }
-    }
+    public static string HowToDraw(int val) => val switch {
+        int.MaxValue => "#".PadRight(4),
+        _ => val.ToString().PadRight(4),
+    };
 
     public int[,] GetMinDistances(IEnumerable<(int, int)> corrupted, int xMax, int yMax) {
-        int[,] distMap = MakeDefaultMap<int>(xMax, yMax, int.MaxValue);
-        bool[,] visited = MakeDefaultMap<bool>(xMax, yMax, false);
+        int[,] distMap = Map<int>.MakeSimpleMap(xMax, yMax, int.MaxValue);
+        bool[,] visited = Map<bool>.MakeSimpleMap(xMax, yMax, false);
         (int, int) toCheck = (0,0);
         distMap[0,0] = 0;
         do{
@@ -76,16 +70,6 @@ public class Day18 : IDay
         return x < 0 || y < 0 || x >= maxX || y >= maxY;
     }
 
-    public T[,] MakeDefaultMap<T>(int maxX, int maxY, T initialVal) {
-        T[,] distMap = new T[maxX, maxY];
-        for(int i = 0; i < maxX; i++) {
-            for(int j = 0; j < maxY; j++) {
-                distMap[i,j] = initialVal;
-            }
-        }
-        return distMap;
-    }
-
     public IEnumerable<(int, int)> GetPoints(IEnumerable<string> lines) {
         return lines.Select(s => s.Split(','))
                     .Select(arr => (int.Parse(arr[0]), int.Parse(arr[1])));
@@ -108,7 +92,7 @@ public class Day18 : IDay
     }
 
     public bool StartConnectedToEnd(IEnumerable<(int, int)> corrupted, int maxX, int maxY) {
-        bool[,] visited = MakeDefaultMap<bool>(maxX, maxY, false);
+        bool[,] visited = Map<bool>.MakeSimpleMap(maxX, maxY, false);
         Queue<(int, int)> toCheck = [];
         toCheck.Enqueue((0,0));
         visited[0,0] = true;
@@ -130,6 +114,6 @@ public class Day18 : IDay
                 }
             }
         }
-        return false;
+        return visited[maxX -1, maxY - 1];
     }
 }
