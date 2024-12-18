@@ -3,6 +3,12 @@ namespace AOC24;
 public class Day7 : ADay {
     public override int DayNum => 7;
 
+    public Day7() : base() {
+        _part1Versions.Add("fold", new("fold", "part 1 using folding, which is probably what most people did", Part1NormalFold));
+        _part2Versions.Add("unfold", new("unfold", "part 2 starting from the result, which shoul be faster", Part2Faster));
+    }
+
+
     public override string Part1(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
@@ -25,13 +31,34 @@ public class Day7 : ADay {
         return result;
     }
 
+    public static string Part1NormalFold(string path) {
+        IEnumerable<string> lines = File.ReadLines(path);
+        IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
+        long sum = 0;
+        foreach((var value, var nums) in values) {
+            if(CheckNumberFold(value, nums)) {
+                sum += value;
+            }
+        }
+        return sum.ToString();
+    }
+
+    public static bool CheckNumberFold(decimal result, IEnumerable<long> nums)
+    {
+        if(nums.Count() == 1) {
+            return result == nums.ElementAt(0);
+        }
+        return CheckNumberFold(result, [nums.ElementAt(0) + nums.ElementAt(1), ..nums.Skip(2)]) ||
+               CheckNumberFold(result, [nums.ElementAt(0) * nums.ElementAt(1), ..nums.Skip(2)]);
+    }
+
     public static bool CheckNumberPossible(decimal result, IEnumerable<long> nums)
     {
         if(nums.Count() == 1) {
             return result == nums.ElementAt(0);
         }
-        return CheckNumberPossible(result - nums.ElementAt(0), nums.Skip(1)) ||
-               CheckNumberPossible(result / nums.ElementAt(0), nums.Skip(1));
+        return (result - nums.ElementAt(0) > 0 && CheckNumberPossible(result - nums.ElementAt(0), nums.Skip(1))) ||
+               (result % nums.ElementAt(0) == 0 && CheckNumberPossible(result / nums.ElementAt(0), nums.Skip(1)));
     }
     public override string Part2(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
@@ -39,6 +66,18 @@ public class Day7 : ADay {
         long sum = 0;
         foreach((var value, var nums) in values) {
             if(CheckNumberPossiblePart2Normal(value, nums)) {
+                sum += value;
+            }
+        }
+        return sum.ToString();
+    }
+
+    public string Part2Faster(string path) {
+        IEnumerable<string> lines = File.ReadLines(path);
+        IEnumerable<(long, IEnumerable<long>)> values = ExtractValues(lines);
+        long sum = 0;
+        foreach((var value, var nums) in values) {
+            if(CheckNumberPossiblePart2(value, nums.Reverse())) {
                 sum += value;
             }
         }
@@ -53,8 +92,8 @@ public class Day7 : ADay {
         if(nums.Count() == 2 && ConcatNumbers(nums.ElementAt(0), nums.ElementAt(1)) == result) {
             return true;
         }
-        return CheckNumberPossiblePart2(result - nums.ElementAt(0), nums.Skip(1)) ||
-               CheckNumberPossiblePart2(result / nums.ElementAt(0), nums.Skip(1)) ||
+        return (result - nums.ElementAt(0) > 0 && CheckNumberPossiblePart2(result - nums.ElementAt(0), nums.Skip(1))) ||
+               (result % nums.ElementAt(0) == 0 && CheckNumberPossiblePart2(result / nums.ElementAt(0), nums.Skip(1))) ||
                (result.ToString().EndsWith(nums.First().ToString()) && CheckNumberPossiblePart2((result - nums.First()) / (10 ^ nums.First().ToString().Length), nums.Skip(1)));
     }
 
@@ -67,11 +106,8 @@ public class Day7 : ADay {
         if(nums.Count() == 1) {
             return result == nums.ElementAt(0);
         }
-        IEnumerable<long> concat = [ConcatNumbers(nums.ElementAt(0), nums.ElementAt(1)), ..nums.Skip(2)];
-        IEnumerable<long> add = [nums.ElementAt(0) + nums.ElementAt(1), ..nums.Skip(2)];
-        IEnumerable<long> mult = [nums.ElementAt(0) * nums.ElementAt(1), ..nums.Skip(2)];
-        return CheckNumberPossiblePart2Normal(result, add) ||
-               CheckNumberPossiblePart2Normal(result, mult) ||
-               CheckNumberPossiblePart2Normal(result, concat);
+        return CheckNumberPossiblePart2Normal(result, [nums.ElementAt(0) + nums.ElementAt(1), ..nums.Skip(2)]) ||
+               CheckNumberPossiblePart2Normal(result, [nums.ElementAt(0) * nums.ElementAt(1), ..nums.Skip(2)]) ||
+               CheckNumberPossiblePart2Normal(result, [ConcatNumbers(nums.ElementAt(0), nums.ElementAt(1)), ..nums.Skip(2)]);
     }
 }

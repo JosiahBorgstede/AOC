@@ -17,29 +17,56 @@ public static class MainClass {
         var fileOption = new Option<string>(name: "--file", () => "", description: "the file to run") {IsRequired = true};
         var timingOption = new Option<bool>(name: "--time", description: "Will time how long a part takes to run");
         timingOption.AddAlias("-t");
-        var debugOption = new Option<bool>(name: "--debug", description: "Will time how long a part takes to run");
+        var debugOption = new Option<bool>(name: "--debug", description: "Will enable debug printing (currently not implemented)");
         debugOption.AddAlias("-d");
 
         var runsOption = new Option<int>(name: "--runs", description: "How many times to run the timing to determine the average", getDefaultValue: () => TimesToRun);
+        runsOption.AddAlias("-r");
 
         var listVersionsCommand = new Command("list", "lists the different versions a day has");
         listVersionsCommand.AddArgument(dayArgument);
         listVersionsCommand.SetHandler(ListVersions, dayArgument);
 
+        var compareSpeedsCommand = new Command("compare", "compares the speed of 2 parts of a day");
+        var typeOptions = new Option<string[]>("--styles", () => [], "the first version to test. Must be configured in the Day constructor");
+        var comparePartArgument = new Argument<int>("part", "the part where the types to comapre are, must be specified");
+        partArgument.FromAmong("1", "2");
+        compareSpeedsCommand.AddArgument(dayArgument);
+        compareSpeedsCommand.AddArgument(partArgument);
+        compareSpeedsCommand.AddOption(typeOptions);
+        compareSpeedsCommand.SetHandler(CompareParts, dayArgument, partArgument, typeOptions, fileOption, runsOption);
+
         var rootCommand = new RootCommand("Running a day of the Avent of Code challenge of 2024");
         rootCommand.AddArgument(dayArgument);
         rootCommand.AddArgument(partArgument);
-        rootCommand.AddOption(fileOption);
+        rootCommand.AddGlobalOption(fileOption);
         rootCommand.AddOption(typeOption);
         rootCommand.AddOption(checkResultOption);
         rootCommand.AddOption(timingOption);
-        rootCommand.AddOption(runsOption);
+        rootCommand.AddGlobalOption(runsOption);
         rootCommand.AddOption(debugOption);
         rootCommand.AddCommand(listVersionsCommand);
+        rootCommand.AddCommand(compareSpeedsCommand);
 
         rootCommand.SetHandler(RunningTheDay, dayArgument, partArgument, fileOption, typeOption, checkResultOption, timingOption, runsOption);
         await rootCommand.InvokeAsync(args);
     }
+
+    private static void CompareParts(int dayArgument, int part, string[] types, string filePath, int runs)
+    {
+        if(types.Length == 0) {
+            RunningTheDay(dayArgument, -part, filePath, checkRes: true, timeRun: true, times: runs);
+        } else {
+            foreach(var type in types) {
+                try{
+                RunningTheDay(dayArgument, part, filePath, type, true, true, runs);
+                } catch {
+                    Console.WriteLine($"Invalid type given: {type}");
+                }
+            }
+        }
+    }
+
 
     public static IDay getDay(int dayNum) =>  dayNum switch  {
             1 => new Day1(),
@@ -110,6 +137,7 @@ public static class MainClass {
 
     public static void RunAllVersionsOfPart(int dayNum, int part, string filePath, bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
         IDay day = getDay(dayNum);
+        Console.WriteLine($"Running all versions of {dayNum} part {part}");
         foreach(var version in day.Part1Versions) {
             Console.WriteLine($"Version: {version.name}");
             RunSinglePart(day, part, filePath, version.name, checkRes, timeRun, times);
@@ -130,30 +158,16 @@ public static class MainClass {
         return res;
     };
 
-    public static Func<string> TimeFunction(this Func<string> toRun, int times) => () => {
+    public static Func< string> TimeFunction(this Func<string> toRun, int times) => () => {
         List<TimeSpan> runTimes = [];
         Console.WriteLine($"Performing {times} runs");
         string res = "";
         for (int i = 0; i < times; i++) {
             runTimes.Add(TimeSingleRun(toRun, out res));
         }
-        Console.WriteLine("Average time was " +
-                          TimeSpan.FromTicks((long) runTimes.Average(x => x.Ticks)));
+        Console.WriteLine("Average time was " + TimeSpan.FromTicks((long) runTimes.Average(x => x.Ticks)));
         return res;
     };
-    public static void TimeFunctionChecked(int times, Func<string> toRun, string expectedResult) {
-        List<TimeSpan> runTimes = [];
-        Console.WriteLine($"Performing {times} runs");
-        for (int i = 0; i < times; i++) {
-            runTimes.Add(TimeSingleRun(toRun, out string result));
-            if(result != expectedResult) {
-                Console.WriteLine($"incorrect answer: {result} expected result was {expectedResult}");
-                return;
-            }
-        }
-        Console.WriteLine("Average time was " +
-                          TimeSpan.FromTicks((long) runTimes.Average(x => x.Ticks)));
-    }
 
     private static TimeSpan TimeSingleRun(Func<string> toRun, out string result) {
         Stopwatch stopwatch = Stopwatch.StartNew();
