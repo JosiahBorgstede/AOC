@@ -1,8 +1,5 @@
-using System.Reflection.Metadata.Ecma335;
-
 namespace AOC24;
 
-using System.Diagnostics;
 using AOCUtil;
 
 public class Day18 : ADay
