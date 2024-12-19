@@ -87,6 +87,7 @@ public class Day18 : ADay
             toAdd++;
             firstKilo = lines.Take(toAdd);
             points = GetPoints(firstKilo);
+            Console.WriteLine(toAdd);
         }
         string badPoint = lines.ElementAt(toAdd - 1);
         return badPoint;
@@ -98,11 +99,11 @@ public class Day18 : ADay
 
     public bool StartConnectedToEnd(IEnumerable<(int, int)> corrupted, int maxX, int maxY) {
         bool[,] visited = Map<bool>.MakeSimpleMap(maxX, maxY, false);
-        Queue<(int, int)> toCheck = [];
-        toCheck.Enqueue((0,0));
+        Stack<(int, int)> toCheck = [];
+        toCheck.Push((0,0));
         visited[0,0] = true;
         while(toCheck.Count > 0){
-            (int curX, int curY) = toCheck.Dequeue();
+            (int curX, int curY) = toCheck.Pop();
             List<(int, int)> potentialPoints = [(curX - 1, curY),
                                                 (curX + 1, curY),
                                                 (curX, curY - 1),
@@ -115,7 +116,7 @@ public class Day18 : ADay
                 }
                 if(!visited[x,y]) {
                     visited[x,y] = true;
-                    toCheck.Enqueue((x,y));
+                    toCheck.Push((x,y));
                 }
             }
         }
