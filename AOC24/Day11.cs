@@ -1,6 +1,6 @@
 namespace AOC24;
 
-public class Day11 : ADay {
+public sealed class Day11 : ADay {
     public override int DayNum => 11;
 
     public override string Part1(string path)

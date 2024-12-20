@@ -1,9 +1,6 @@
 namespace AOC24;
 
-using System.Diagnostics;
-using System.IO.Pipes;
-
-public class Day12 : ADay {
+public sealed class Day12 : ADay {
     public override int DayNum => 12;
 
 

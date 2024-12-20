@@ -1,16 +1,12 @@
 namespace AOC24;
 
-using System.Collections.Concurrent;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 using System.Text.RegularExpressions;
 
 public record Machine (
     (int x, int y) AButton,
     (int x, int y) BButton,
     (int x, int y) Prize);
-public class Day13 : ADay
+public sealed class Day13 : ADay
 {
     public override int DayNum => 13;
 

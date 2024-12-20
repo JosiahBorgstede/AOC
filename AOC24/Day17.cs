@@ -3,7 +3,7 @@ namespace AOC24;
 using System.Text;
 
 public record Registers(long A, long B, long C);
-public class Day17 : ADay
+public sealed class Day17 : ADay
 {
     public override int DayNum => 17;
 

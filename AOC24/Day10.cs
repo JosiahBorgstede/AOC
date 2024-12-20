@@ -1,6 +1,6 @@
 namespace AOC24;
 
-public class Day10 : ADay {
+public sealed class Day10 : ADay {
     public override int DayNum => 10;
 
     public string GetExpectedResult(int part) {

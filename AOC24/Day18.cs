@@ -2,12 +2,13 @@ namespace AOC24;
 
 using AOCUtil;
 
-public class Day18 : ADay
+public sealed class Day18 : ADay
 {
     public override int DayNum => 18;
 
     public Day18() : base() {
         _part2Versions.Add("faster", new("faster", "An attempt to make part 2 faster by computing the articulation vertices initially", Part2Faster));
+        _part2Versions.Add("bfs", new("bfs", "part 2 using bfs, which should be slower", Part2BFS));
     }
 
     public override string Part1(string path)
@@ -84,12 +85,28 @@ public class Day18 : ADay
             toAdd++;
             firstKilo = lines.Take(toAdd);
             points = GetPoints(firstKilo);
-            Console.WriteLine(toAdd);
         }
         string badPoint = lines.ElementAt(toAdd - 1);
         return badPoint;
     }
 
+    [AOC(2, "bfs", Description = "the original using bfs, which should be slower")]
+    public string Part2BFS(string path)
+    {
+        IEnumerable<string> lines = File.ReadAllLines(path);
+        IEnumerable<string> firstKilo = lines.Take(1024);
+        IEnumerable<(int, int)> points = GetPoints(firstKilo);
+        int toAdd = 1024;
+        while(StartConnectedToEndBFS(points, 71, 71)) {
+            toAdd++;
+            firstKilo = lines.Take(toAdd);
+            points = GetPoints(firstKilo);
+        }
+        string badPoint = lines.ElementAt(toAdd - 1);
+        return badPoint;
+    }
+
+    [AOC(2, "faster", Description = "an attempt to make things faster by memoizing (not done)")]
     public string Part2Faster(string path) {
         return "not done yet";
     }
@@ -114,6 +131,32 @@ public class Day18 : ADay
                 if(!visited[x,y]) {
                     visited[x,y] = true;
                     toCheck.Push((x,y));
+                }
+            }
+        }
+        return visited[maxX -1, maxY - 1];
+    }
+
+    public bool StartConnectedToEndBFS(IEnumerable<(int, int)> corrupted, int maxX, int maxY) {
+        bool[,] visited = Map<bool>.MakeSimpleMap(maxX, maxY, false);
+        Queue<(int, int)> toCheck = [];
+        toCheck.Enqueue((0,0));
+        visited[0,0] = true;
+        while(toCheck.Count > 0){
+            (int curX, int curY) = toCheck.Dequeue();
+            List<(int, int)> potentialPoints = [(curX - 1, curY),
+                                                (curX + 1, curY),
+                                                (curX, curY - 1),
+                                                (curX, curY + 1)];
+            potentialPoints.RemoveAll(p => corrupted.Contains(p));
+            potentialPoints.RemoveAll(p => OutOfBounds(p.Item1, p.Item2, maxX, maxY));
+            foreach((int x, int y) in potentialPoints) {
+                if(x == maxX - 1 && y == maxY - 1) {
+                    return true;
+                }
+                if(!visited[x,y]) {
+                    visited[x,y] = true;
+                    toCheck.Enqueue((x,y));
                 }
             }
         }

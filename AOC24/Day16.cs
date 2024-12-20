@@ -1,9 +1,7 @@
 namespace AOC24;
 
-using System.Net.Mail;
-using System.Reflection.Metadata;
-public record MazePosition(int vertScore, int horzScore);
-public class Day16 : ADay
+public sealed record MazePosition(int vertScore, int horzScore);
+public sealed class Day16 : ADay
 {
     public override int DayNum => 16;
 

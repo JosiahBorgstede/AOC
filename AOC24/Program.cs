@@ -1,9 +1,10 @@
 ﻿namespace AOC24;
 
+using System.Collections.Immutable;
 using System.CommandLine;
 using System.CommandLine.Parsing;
 using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
+using System.Reflection;
 
 public static class MainClass {
     const int TimesToRun = 50;
@@ -34,12 +35,13 @@ public static class MainClass {
         compareSpeedsCommand.AddArgument(dayArgument);
         compareSpeedsCommand.AddArgument(comparePartArgument);
         compareSpeedsCommand.AddArgument(typeArgument);
-        compareSpeedsCommand.SetHandler(CompareParts, dayArgument, comparePartArgument, typeArgument, fileOption, runsOption);
+        compareSpeedsCommand.SetHandler(CompareParts, dayArgument, comparePartArgument, typeArgument, fileOption, runsOption, debugOption);
 
         var rootCommand = new RootCommand("Running a day of the Avent of Code challenge of 2024");
         rootCommand.AddArgument(dayArgument);
         rootCommand.AddArgument(partArgument);
         rootCommand.AddGlobalOption(fileOption);
+        rootCommand.AddGlobalOption(debugOption);
         rootCommand.AddOption(typeOption);
         rootCommand.AddOption(checkResultOption);
         rootCommand.AddOption(timingOption);
@@ -48,19 +50,19 @@ public static class MainClass {
         rootCommand.AddCommand(listVersionsCommand);
         rootCommand.AddCommand(compareSpeedsCommand);
 
-        rootCommand.SetHandler(RunningTheDay, dayArgument, partArgument, fileOption, typeOption, checkResultOption, timingOption, runsOption);
+        rootCommand.SetHandler(RunningTheDay, dayArgument, partArgument, fileOption, typeOption, checkResultOption, timingOption, runsOption, debugOption);
         await rootCommand.InvokeAsync(args);
     }
 
-    private static void CompareParts(int dayArgument, int part, List<string> types, string filePath, int runs)
+    private static void CompareParts(int dayArgument, int part, List<string> types, string filePath, int runs, bool debug)
     {
         if(types.Count == 0) {
-            RunningTheDay(dayArgument, -part, filePath, checkRes: true, timeRun: true, times: runs);
+            RunningTheDay(dayArgument, -part, filePath, checkRes: true, timeRun: true, times: runs, debug: debug);
         } else {
             foreach(var type in types) {
                 try{
                     Console.WriteLine($"Version: {type}");
-                    RunningTheDay(dayArgument, part, filePath, type, true, true, runs);
+                    RunningTheDay(dayArgument, part, filePath, type, true, true, runs, debug: debug);
                 } catch {
                     Console.WriteLine($"Invalid type given: {type}");
                 }
@@ -69,7 +71,7 @@ public static class MainClass {
     }
 
 
-    public static IDay getDay(int dayNum) =>  dayNum switch  {
+    public static IDay getDay(int dayNum) => dayNum switch  {
             1 => new Day1(),
             2 => new Day2(),
             3 => new Day3(),
@@ -88,22 +90,20 @@ public static class MainClass {
             16 => new Day16(),
             17 => new Day17(),
             18 => new Day18(),
+            19 => new Day19(),
             _ => throw new Exception("Day not added"),
         };
 
     public static void ListVersions(int dayNum) {
         IDay day = getDay(dayNum);
         Console.WriteLine("All of the different versions for day " + dayNum);
-        Console.WriteLine("Part 1:");
-        foreach(var version in day.Part1Versions) {
-            Console.WriteLine($"{version.name}: {version.description}");
-        }
-        Console.WriteLine("Part 2:");
-        foreach(var version in day.Part2Versions) {
-            Console.WriteLine($"{version.name}: {version.description}");
+        foreach((var att, var _) in GetAOCChallenges(day)) {
+            string description = att.Description != null ? " Description: " + att.Description : "";
+            Console.WriteLine($"Part: {att.Part}, Name: {att.Name.ToString().PadRight(10)}" + description);
         }
     }
-    public static void RunningTheDay(int dayNum, int part, string filePath, string type = "base", bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
+
+    public static void RunningTheDay(int dayNum, int part, string filePath, string type = "base", bool checkRes = false, bool timeRun = false, int times = TimesToRun, bool debug = false) {
         IDay day = getDay(dayNum);
         if(filePath == "") {
             filePath = $"./Inputs/Day{dayNum}.txt";
@@ -126,28 +126,39 @@ public static class MainClass {
 
     public static void RunSinglePart(IDay day, int part, string filePath, string type = "base", bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
         Console.WriteLine($"Day: {day.DayNum} Part: {part} ");
-        Func<string> toRun = () => day[part, type](filePath);
-        if(timeRun) {
-            toRun = toRun.TimeFunction(times);
+        try{
+            Func<string> toRun = RunASpecifiedDayPart(day, part, filePath, type);
+            if(timeRun) {
+                toRun = toRun.TimeFunction(times);
+            }
+            if(checkRes) {
+                toRun = toRun.CheckFunc(day.GetExpectedResult(part, filePath));
+            }
+            Console.WriteLine("Result: " + toRun());
+        } catch (Exception e) {
+            Console.WriteLine(e.Message);
         }
-        if(checkRes) {
-            toRun = toRun.CheckFunc(day.GetExpectedResult(part, filePath));
-        }
-        Console.WriteLine("Result: " + toRun());
     }
 
     public static void RunAllVersionsOfPart(int dayNum, int part, string filePath, bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
         IDay day = getDay(dayNum);
-        Console.WriteLine($"Running all versions of {dayNum} part {part}");
-        foreach(var version in day.Part1Versions) {
-            Console.WriteLine($"Version: {version.name}");
-            RunSinglePart(day, part, filePath, version.name, checkRes, timeRun, times);
+        RunEntireDay(dayNum, part, filePath);
+        foreach((var att, var func) in GetAOCChallenges(day)) {
+            if(att.Part == part) {
+                Console.WriteLine(func(filePath));
+            }
         }
     }
 
-    public static Func<string> RunASpecifiedDayPart(IDay day, int part, string inputPath, string version = "base") => () => {
-        return day[part, version](inputPath);
-    };
+    public static void RunEntireDay(int dayNum, int part, string filePath) {
+        IDay day = getDay(dayNum);
+        foreach((var _, var func) in GetAOCChallenges(day)) {
+            Console.WriteLine(func(filePath));
+        }
+    }
+
+    public static Func<string> RunASpecifiedDayPart(IDay day, int part, string inputPath, string version = "base") =>
+    () => GetSpecificAOCChallenges(day, part, version)(inputPath);
 
     public static Func<string> CheckFunc(this Func<string> toRun, string expectedResult) => () => {
         string res = toRun();
@@ -159,7 +170,7 @@ public static class MainClass {
         return res;
     };
 
-    public static Func< string> TimeFunction(this Func<string> toRun, int times) => () => {
+    public static Func<string> TimeFunction(this Func<string> toRun, int times) => () => {
         List<TimeSpan> runTimes = [];
         Console.WriteLine($"Performing {times} runs");
         string res = "";
@@ -175,5 +186,34 @@ public static class MainClass {
         result = toRun();
         stopwatch.Stop();
         return stopwatch.Elapsed;
+    }
+
+    public static IEnumerable<(AOCAttribute,Func<string, string?>)> GetAOCChallenges(IDay day) {
+        List<(AOCAttribute,Func<string, string?>)> challenges = [];
+        MethodInfo[] MyMemberInfo = day.GetType().GetMethods();
+        for (int i = 0; i < MyMemberInfo.Length; i++)
+        {
+            AOCAttribute? att = (AOCAttribute?) Attribute.GetCustomAttribute(MyMemberInfo[i], typeof (AOCAttribute));
+            if (att != null)
+            {
+                MethodInfo cur = MyMemberInfo[i];
+                challenges.Add((att, (s) => (string?) cur.Invoke(day, [s])));
+            }
+        }
+        return challenges;
+    }
+
+    public static Func<string, string> GetSpecificAOCChallenges(IDay day, int part, string name = "base") {
+        MethodInfo[] MyMemberInfo = day.GetType().GetMethods();
+        for (int i = 0; i < MyMemberInfo.Length; i++)
+        {
+            AOCAttribute? att = (AOCAttribute?) Attribute.GetCustomAttribute(MyMemberInfo[i], typeof (AOCAttribute));
+            if (att != null && att.Name == name && att.Part == part)
+            {
+                MethodInfo cur = MyMemberInfo[i];
+                return (s) => (string) cur.Invoke(day, [s])!;
+            }
+        }
+        throw new ArgumentException($"Method named {name} not found");
     }
 }

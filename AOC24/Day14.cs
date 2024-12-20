@@ -1,11 +1,9 @@
 namespace AOC24;
 
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 public record Robot((int x, int y) startPos, (int dx, int dy) velocity);
-public class Day14 : ADay
+public sealed class Day14 : ADay
 {
     public override int DayNum => 14;
 

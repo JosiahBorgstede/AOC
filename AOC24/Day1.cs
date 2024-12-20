@@ -7,7 +7,6 @@ public class Day1 : ADay {
     public override int DayNum => 1;
 
     public Day1() {
-        _part1Versions.Add("testing", new("testing", "seeing if string splitting is faster than regex", Part1Testing));
         _part2Versions.Add("testing", new("testing", "seeing if string splitting is faster than regex", Part2Testing));
     }
 
@@ -40,6 +39,7 @@ public class Day1 : ADay {
         return val.ToString();
     }
 
+    [AOC(1, "testing", Description ="seeing if string splitting is faster than regex")]
     public static string Part1Testing(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         List<int> first = new List<int>();
@@ -54,6 +54,7 @@ public class Day1 : ADay {
         return first.Zip(second).Select(pair => int.Abs(pair.First - pair.Second)).Sum().ToString();
     }
 
+    [AOC(2, "testing", Description ="seeing if string splitting is faster than regex")]
     public static string Part2Testing(string path) {
         IEnumerable<string> lines = File.ReadLines(path);
         List<int> first = new List<int>();
