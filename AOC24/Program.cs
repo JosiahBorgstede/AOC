@@ -8,7 +8,9 @@ using System.Reflection;
 
 public static class MainClass {
     const int TimesToRun = 50;
-    public static async Task Main(string[] args) {
+
+    //TODO: make this better, this is a mess
+    public static int Main(string[] args) {
 
         var dayArgument = new Argument<int>("day", "the day to run");
         var partArgument = new Argument<int>(name: "part", description: "the part to run", getDefaultValue: () => 0);
@@ -51,7 +53,7 @@ public static class MainClass {
         rootCommand.AddCommand(compareSpeedsCommand);
 
         rootCommand.SetHandler(RunningTheDay, dayArgument, partArgument, fileOption, typeOption, checkResultOption, timingOption, runsOption, debugOption);
-        await rootCommand.InvokeAsync(args);
+        return rootCommand.Invoke(args);
     }
 
     private static void CompareParts(int dayArgument, int part, List<string> types, string filePath, int runs, bool debug)
@@ -93,6 +95,8 @@ public static class MainClass {
             19 => new Day19(),
             20 => new Day20(),
             21 => new Day21(),
+            22 => new Day22(),
+            23 => new Day23(),
             _ => throw new Exception("Day not added"),
         };
 

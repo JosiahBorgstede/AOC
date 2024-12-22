@@ -90,6 +90,7 @@ public sealed class Day17 : ADay
         _ => throw new Exception("unknown operand"),
     };
 
+    [AOC(2, "old", Description = "Older version of part 2 that is specific to my input")]
     public string Part2Old(string path)
     {
         List<string> lines = File.ReadLines(path).ToList();
@@ -194,7 +195,7 @@ public sealed class Day17 : ADay
         6 => 'C',
         _ => throw new Exception("unknown operand"),
     };
-
+    //TODO
     public override string Part2(string path)
     {
         List<string> lines = File.ReadLines(path).ToList();
