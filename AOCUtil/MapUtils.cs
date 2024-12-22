@@ -18,6 +18,15 @@ public static class MapHelper  {
         }
     }
 
+    public static void DrawMap<U>(U[,] map, Func<(int, int), string> transform) {
+        for(int i = 0; i < map.GetLength(1); i++) {
+            for(int j = 0; j < map.GetLength(0); j++) {
+                Console.Write(transform((i,j)));
+            }
+            Console.WriteLine();
+        }
+    }
+
     public static void DrawMap<U>(U[,] map) {
         for(int i = 0; i < map.GetLength(1); i++) {
             for(int j = 0; j < map.GetLength(0); j++) {
@@ -39,6 +48,17 @@ public static class MapHelper  {
             }
         }
         return map;
+    }
+
+    public static (int, int) LocatePoint<T>(T[,] map, T toFind) where T : IEquatable<T> {
+        for(int i = 0; i < map.GetLength(0); i++) {
+            for(int j = 0; j < map.GetLength(1); j++) {
+                if(map[i,j].Equals(toFind)) {
+                    return (i, j);
+                }
+            }
+        }
+        return (0,0);
     }
 }
 public class Map<T>  {

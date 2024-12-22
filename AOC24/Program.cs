@@ -91,6 +91,8 @@ public static class MainClass {
             17 => new Day17(),
             18 => new Day18(),
             19 => new Day19(),
+            20 => new Day20(),
+            21 => new Day21(),
             _ => throw new Exception("Day not added"),
         };
 
@@ -126,7 +128,6 @@ public static class MainClass {
 
     public static void RunSinglePart(IDay day, int part, string filePath, string type = "base", bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
         Console.WriteLine($"Day: {day.DayNum} Part: {part} ");
-        try{
             Func<string> toRun = RunASpecifiedDayPart(day, part, filePath, type);
             if(timeRun) {
                 toRun = toRun.TimeFunction(times);
@@ -135,9 +136,6 @@ public static class MainClass {
                 toRun = toRun.CheckFunc(day.GetExpectedResult(part, filePath));
             }
             Console.WriteLine("Result: " + toRun());
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
     }
 
     public static void RunAllVersionsOfPart(int dayNum, int part, string filePath, bool checkRes = false, bool timeRun = false, int times = TimesToRun) {
