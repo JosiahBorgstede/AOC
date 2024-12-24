@@ -129,7 +129,7 @@ public sealed class Day15 : ADay
         map[botX, botY] = '.';
         return map;
     }
-
+    //TODO: make this system better
     public static char[,] MakeMovementVertical(int botX, int botY, char[,] map, char dir) {
         var move = GetDirection(dir);
         Queue<(int, int)> toCheck = [];

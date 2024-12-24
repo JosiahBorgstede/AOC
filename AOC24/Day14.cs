@@ -1,5 +1,6 @@
 namespace AOC24;
 
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.RegularExpressions;
 public record Robot((int x, int y) startPos, (int dx, int dy) velocity);
@@ -45,20 +46,23 @@ public sealed class Day14 : ADay
         y = y < 0 ? yMax + y : y;
         return (x, y);
     }
-
+    //TODO: figure out a better way to determine when to break other than after
+    //      100 steps
     public override string Part2(string path)
     {
         List<Robot> robots = GetRobots(File.ReadLines(path));
         int cur = 0;
+        double curLowestXVariance = double.MaxValue;
+        double curLowestYVariance = double.MaxValue;
         while(cur < 10000){
             List<(int, int)> finalPositions = [];
             foreach(Robot robot in robots) {
                 finalPositions.Add(CalculateRobotPosition(robot, cur, 101, 103));
             }
             (double x, double y) = GetVariance(finalPositions);
-            if(x < 400 && y < 400) {
-                //Console.WriteLine($"{cur}:{x},{y}");
-                //Console.WriteLine(CurrentFloor(finalPositions, 101, 103));
+            curLowestXVariance = x < curLowestXVariance ? x : curLowestXVariance;
+            curLowestYVariance = y < curLowestYVariance ? y : curLowestYVariance;
+            if(x <= curLowestXVariance && y <= curLowestYVariance && cur > 100) { //here is what the todo means
                 break;
             }
             cur++;
@@ -72,6 +76,12 @@ public sealed class Day14 : ADay
         double yAvg = values.Average(x => x.Item2);
         double yVariance = values.Sum(x => (x.Item2 - yAvg)*(x.Item2 - yAvg));
         return (xVariance/values.Count, yVariance/values.Count);
+    }
+
+    public static double GetXVariance(List<(int, int)> values) {
+        double xAvg = values.Average(x => x.Item1);
+        double xVariance = values.Sum(x => (x.Item1 - xAvg)*(x.Item1 - xAvg));
+        return xVariance/values.Count;
     }
 
     public static string CurrentFloor(List<(int, int)> values, int xMax, int yMax) {

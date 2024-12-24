@@ -1,3 +1,5 @@
+using AOCUtil;
+
 namespace AOC24;
 
 public sealed record MazePosition(int vertScore, int horzScore);
@@ -15,7 +17,7 @@ public sealed class Day16 : ADay
         var values = MakeResultMap(map);
         bool changed = true;
         while(changed) {
-            values = updateMap(map, values, out changed);
+            values = updateMap(map, values, 'S', new MazePosition(1000, 0), out changed);
         }
         var res = values[EndPos.x, EndPos.y];
         return Math.Min(res.vertScore, res.horzScore).ToString();
@@ -91,13 +93,13 @@ public sealed class Day16 : ADay
         return resMap;
     }
 
-    public MazePosition[,] updateMap(char[,] map, MazePosition[,] values, out bool changed)
+    public MazePosition[,] updateMap(char[,] map, MazePosition[,] values, char startChar, MazePosition startVals, out bool changed)
     {
         changed = false;
         for(int i = 0; i < map.GetLength(0); i++) {
             for(int j = 0; j < map.GetLength(1); j++) {
                 var cur = values[i,j];
-                values[i,j] = CheckPoint(map, values, i, j);
+                values[i,j] = CheckPoint(map, values, i, j, startChar, startVals);
                 if(cur != values[i,j]) {
                     changed = true;
                 }
@@ -106,9 +108,9 @@ public sealed class Day16 : ADay
         return values;
     }
 
-    public MazePosition CheckPoint(char[,] map, MazePosition[,] vals, int curX, int curY) {
-        if(map[curX, curY] == 'S') {
-            return new MazePosition(1000, 0);
+    public MazePosition CheckPoint(char[,] map, MazePosition[,] vals, int curX, int curY, char startChar, MazePosition startPos) {
+        if(map[curX, curY] == startChar) {
+            return startPos;
         }
         if(map[curX, curY] == '#') {
             return new MazePosition(int.MaxValue, int.MaxValue);
@@ -143,22 +145,57 @@ public sealed class Day16 : ADay
         int minVert = potentialVertVals.Min();
         return new MazePosition(minVert, minHorz);
     }
-
+    //TODO: create a better algorithm for determining weights to reach a point,
+    //      from  point. For a point to be on the best path, the sum of its
+    //      cost from start plus sum from end should equal total score
     public override string Part2(string path)
     {
         char[,] map = MakeMap(File.ReadLines(path));
         var values = MakeResultMap(map);
         bool changed = true;
         while(changed) {
-            values = updateMap(map, values, out changed);
+            values = updateMap(map, values, 'S', new MazePosition(1000, 0), out changed);
         }
-        IEnumerable<(int, int)> bestSpots = DetermineBestSpots(values, map, EndPos.x, EndPos.y).Distinct();
-        //DrawMapBestPath(values, map, bestSpots);
-        //DrawMapResults(values, map);
-        //DrawMapBestPath(values, map, bestSpots);
+        var values2 = MakeResultMap(map);
+        changed = true;
+        while(changed) {
+            values2 = updateMap(map, values2, 'E', new MazePosition(0, 0), out changed);
+        }
+        IEnumerable<(int, int)> bestSpots = AlongBestRoute(values, values2,  BestScore(values[EndPos.x, EndPos.y]));
+        MapHelper.DrawMap(values, ((int i, int j) p) => HowToDraw(p.i, p.j, bestSpots, map));
+
         return bestSpots.Count().ToString();
     }
 
+    public static string HowToDraw(int x, int y, IEnumerable<(int, int)> spots, char[,] charMap) {
+        if(spots.Contains((x,y))) {
+            return "1";
+        }
+        if(charMap[x,y] == '#') {
+            return "#";
+        }
+        return ".";
+    }
+
+    public static int BestScore(MazePosition pos) {
+        return Math.Min(pos.horzScore, pos.vertScore);
+    }
+
+    public static bool PointAlongBest(MazePosition fromStart, MazePosition fromEnd, int totalDist) {
+        return fromStart.vertScore + fromEnd.vertScore == totalDist ||
+               fromStart.horzScore + fromEnd.vertScore == totalDist ||
+               fromStart.vertScore + fromEnd.horzScore == totalDist ||
+               fromStart.horzScore + fromEnd.horzScore == totalDist;
+    }
+    public static IEnumerable<(int, int)> AlongBestRoute(MazePosition[,] fromStart, MazePosition[,] fromEnd, int totalDist) {
+        for(int i = 0; i < fromStart.GetLength(0); i++) {
+            for(int j = 0; j < fromStart.GetLength(1); j++) {
+                if(PointAlongBest(fromStart[i,j], fromEnd[i,j], totalDist)) {
+                    yield return (i,j);
+                }
+            }
+        }
+    }
     public static List<(int, int)> DetermineBestSpots(MazePosition[,] values, char[,] map, int curX, int curY) {
         Queue<(int, int)> toCheck = [];
         toCheck.Enqueue((curX, curY));
