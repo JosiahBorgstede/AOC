@@ -1,4 +1,4 @@
-def createGraph(file):
+def createGraph(file) -> dict[str, list[str]]:
     adjList = {}
     for line in open(file, "r").readlines():
         vals = line.strip().split(" ")
